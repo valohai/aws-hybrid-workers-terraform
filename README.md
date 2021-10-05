@@ -5,7 +5,7 @@ This repository contains a Terraform script to deploy the resources required by 
 ## Prerequisites
 
 * [Install Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
-* [Install AWS CLI](https://cloud.google.com/sdk/docs/install)
+* [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html)
 * Configure a new AWS profile with your credentials by running `aws configure --profile myname` on your workstation
 
 ## Running the Terraform template
@@ -23,3 +23,7 @@ Review the `variables.tfvars` file and add your project and region details.
 3. Finally execute `terraform apply "valohai-init"` to configure the resources needed for a Valohai Hybrid AWS Installation.
 
 After you've created all the resources, you'll need to share the outputs with Valohai (`master_iam`, `secret_name`, `valohai_queue_private_ip`, `valohai_queue_public_ip`)
+
+## Removing Valohai resources
+
+To remove all of the created Valohai resources empty your `valohai-data` S3 bucket and run `terraform destroy -var-file=variables.tfvars`.
