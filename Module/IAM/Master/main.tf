@@ -55,6 +55,7 @@ resource "aws_iam_role_policy" "valohai_master_policy" {
           "ec2:CreateLaunchTemplateVersion",
           "ec2:ModifyLaunchTemplate",
           "ec2:RunInstances",
+          "ec2:RebootInstances",
           "autoscaling:UpdateAutoScalingGroup",
           "autoscaling:CreateOrUpdateTags",
           "autoscaling:SetDesiredCapacity",
