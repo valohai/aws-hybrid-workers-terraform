@@ -26,4 +26,4 @@ After you've created all the resources, you'll need to share the outputs with Va
 
 ## Removing Valohai resources
 
-To remove all of the created Valohai resources empty your `valohai-data` S3 bucket and run `terraform destroy -var-file=variables.tfvars`.
+To remove all of the created Valohai resources empty your `valohai-data-*` S3 bucket and run `terraform destroy -var-file=variables.tfvars`.
