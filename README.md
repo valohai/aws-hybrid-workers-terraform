@@ -37,18 +37,18 @@ This template is designed to provision the required services in a fresh AWS Acco
   * `valohai-sg-queue` for the `valohai-queue` EC2 instance.
     * It will allow app.valohai.com to connect to Redis (over TLS) on port 63790.
     * Allow the autoscaled Valohai workers to connect to Redis on port 63790.
-    * Open port 80 for the letencrypt challenge and certificate renewal.
+    * Open port 80 for the Let's Encrypt challenge and certificate renewal.
 
 * **EC2 instance** (`valohai-queue`) that's responsible for storing the job queue, job states, and short-term logs. Valohai communicates with this machines (Redis over TLS) to schedule new jobs and access the logs of existing jobs. 
   * You'll need to provide a key pair that can be uploaded to your AWS account for connecting to this instance.
   * The machine will also have an Elastic IP attached to it.
 
 * **A secret** stored in your AWS Secrets Manager. The secret `valohai_redis_server` contains the password for Redis that's located inside in your `valohai-queue` instance.
-* **S3 Bucket** where Valohai will upload logs from your executions, commit snapshots, and where by default all the generated artefacts will be uploaded to.
+* **S3 Bucket** where Valohai will upload logs from your executions and commit snapshots. All the generated artefacts will be uploaded to this bucket by default.
 * **IAM Roles:**
   * `ValohaiQueueRole` will be attached to the Valohai Queue instance, and allows it to fetch the generated password from your AWS Secrets Manager. Access is restricted to secrets that are tagged `valohai:1`
   * `ValohaiWorkerRole` is attached to all autoscaled EC2 instances that are launched for machine learning jobs.
-  * `ValohaiMaster` is the role that the Valohai service will use to managed autoscaling and EC2 resources, and manage resources in the newly provisioned valohai-data S3 Bucket.
+  * `ValohaiMaster` is the role that the Valohai service will use to manage autoscaling and EC2 resources. The role is also used to manage the newly provisioned `valohai-data-*` S3 Bucket.
 
 ## Removing Valohai resources
 
