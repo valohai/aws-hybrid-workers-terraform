@@ -42,6 +42,8 @@ resource "aws_iam_role_policy" "valohai_master_policy" {
           "ec2:DescribeLaunchTemplates",
           "ec2:DescribeLaunchTemplateVersions",
           "ec2:DescribeInstanceAttribute",
+          "ec2:DescribeRouteTables",
+          "ec2:DescribeInternetGateways",
           "ec2:CreateTags",
           "autoscaling:DescribeAutoScalingGroups",
           "autoscaling:DescribeScalingActivities"
