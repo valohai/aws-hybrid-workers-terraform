@@ -23,7 +23,7 @@ To deploy the resources:
 * Run `terraform plan -out="valohai-init" -var-file=variables.tfvars` to create an execution plan and see what kind of changes will be applied to your AWS Project.
 * Finally run `terraform apply "valohai-init"` to configure the resources needed for a Valohai Hybrid AWS Installation.
 
-After you've created all the resources, you'll need to share the outputs with your Valohai contact (master_iam)
+After you've created all the resources, you'll need to share the outputs with your Valohai contact (master_iam) and the VPC and subnets where you want Valohai to launch the resources.
 
 ## What will get deployed?
 

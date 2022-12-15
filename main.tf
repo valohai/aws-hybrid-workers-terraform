@@ -16,6 +16,7 @@ module "EC2" {
   ec2_key        = var.ec2_key
   region         = var.region
   company        = var.company
+  vpc_id         = var.vpc_id
 }
 
 module "IAM_Master" {

@@ -8,6 +8,11 @@ variable "region" {
   type        = string
 }
 
+variable "vpc_id" {
+  description = "AWS VPC ID"
+  type        = string
+}
+
 variable "company" {
   description = "Company name, used for Valohai resources"
   type        = string
