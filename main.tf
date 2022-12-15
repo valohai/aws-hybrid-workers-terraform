@@ -11,22 +11,11 @@ provider "aws" {
   region  = var.region
 }
 
-module "VPC" {
-  source   = "./Module/VPC"
-  vpc_cidr = var.vpc_cidr
-}
-
 module "EC2" {
   source         = "./Module/EC2"
   ec2_key        = var.ec2_key
   region         = var.region
   company        = var.company
-  subnet         = module.VPC.queue_subnet
-  security_group = module.VPC.queue_sg
-  vpc_id         = module.VPC.vpc_id
-  queue_address  = var.queue_address
-
-  depends_on = [module.VPC]
 }
 
 module "IAM_Master" {
@@ -39,10 +28,6 @@ module "IAM_Master" {
 
 module "IAM_Workers" {
   source = "./Module/IAM/Workers"
-}
-
-module "Worker-Queue" {
-  source = "./Module/IAM/Worker-Queue"
 }
 
 module "IAM_S3" {
