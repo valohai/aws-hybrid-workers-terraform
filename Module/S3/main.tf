@@ -2,7 +2,6 @@ data "aws_caller_identity" "current" {}
 
 resource "aws_s3_bucket" "valohai_data" {
   bucket = "valohai-data-${data.aws_caller_identity.current.account_id}"
-  acl    = "public-read"
 
   cors_rule {
     allowed_headers = ["Authorization"]
