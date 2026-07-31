@@ -1,14 +1,10 @@
 resource "aws_secretsmanager_secret" "valohai_redis_secret" {
   name_prefix = "ValohaiRedisSecret-"
-
-  tags = {
-    valohai = 1
-  }
 }
 
 resource "random_password" "password" {
-  length           = 32
-  special          = false
+  length  = 32
+  special = false
 }
 
 resource "aws_secretsmanager_secret_version" "valohai_redis_secret_1" {
@@ -22,7 +18,7 @@ data "aws_ami" "ubuntu" {
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+    values = ["ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"]
   }
 
   filter {
@@ -39,29 +35,21 @@ resource "aws_key_pair" "valohai-queue-key" {
   public_key = file("${var.ec2_key}")
 
   tags = {
-    Name    = "valohai-queue",
-    valohai = 1
+    Name = "valohai-queue-key",
   }
 }
 
 # Valohai queue instance
 resource "aws_instance" "valohai-queue" {
-  ami             = data.aws_ami.ubuntu.id
-  instance_type   = "t3.medium"
-  key_name        = aws_key_pair.valohai-queue-key.id
-  security_groups = ["${var.security_group}"]
-  subnet_id       = var.subnet
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = "t3.medium"
+  key_name               = aws_key_pair.valohai-queue-key.id
+  vpc_security_group_ids = ["${var.security_group}"]
+  subnet_id              = var.subnet
   ebs_block_device {
     device_name = "/dev/sda1"
     volume_type = "gp2"
     volume_size = 16
-  }
-
-  connection {
-    type        = "ssh"
-    user        = "ubuntu"
-    host        = aws_instance.valohai-queue.public_ip
-    private_key = file("${var.queue-key}")
   }
 
   user_data = <<-EOF
@@ -69,19 +57,21 @@ resource "aws_instance" "valohai-queue" {
     curl https://raw.githubusercontent.com/valohai/worker-queue/main/host/setup.sh | sudo QUEUE_ADDRESS=${var.queue_address} REDIS_PASSWORD=${random_password.password.result} bash
     EOF
 
+  lifecycle {
+    ignore_changes = [ami]
+  }
+
   tags = {
-    Name    = "valohai-queue",
-    valohai = 1
+    Name = "valohai-queue",
   }
 }
 
 # ElasticIP
 resource "aws_eip" "valohai-ip-queue" {
-  vpc      = true
+  domain   = "vpc"
   instance = aws_instance.valohai-queue.id
 
   tags = {
-    "Name"  = "valohai-ip-queue",
-    valohai = 1
+    "Name" = "valohai-queue-ip",
   }
 }

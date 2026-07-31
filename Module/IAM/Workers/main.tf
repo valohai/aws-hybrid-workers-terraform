@@ -39,11 +39,15 @@ resource "aws_iam_role" "valohai_worker_role" {
   })
 
   tags = {
-    valohai = 1,
+    Name = "valohai-worker-role"
   }
 }
 
 resource "aws_iam_instance_profile" "valohai_worker_profile" {
   name = "ValohaiWorkerProfile"
   role = aws_iam_role.valohai_worker_role.name
+
+  tags = {
+    Name = "valohai-worker-profile"
+  }
 }

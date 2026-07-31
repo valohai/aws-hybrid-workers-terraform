@@ -17,7 +17,7 @@ resource "aws_iam_role" "valohai_master_role" {
   })
 
   tags = {
-    valohai = 1,
+    Name = "valohai-master-role"
   }
 }
 

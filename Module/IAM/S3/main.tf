@@ -18,7 +18,7 @@ resource "aws_iam_role" "valohai_data_multipart" {
   })
 
   tags = {
-    valohai = 1,
+    Name = "valohai-multipart-role"
   }
 }
 
