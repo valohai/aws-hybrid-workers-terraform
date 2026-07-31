@@ -16,13 +16,17 @@ resource "aws_iam_role" "valohai_queue_role" {
   })
 
   tags = {
-    valohai = 1,
+    Name = "valohai-queue-role"
   }
 }
 
 resource "aws_iam_instance_profile" "valohai_queue_profile" {
   name = "ValohaiQueueInstanceProfile"
   role = aws_iam_role.valohai_queue_role.name
+
+  tags = {
+    Name = "valohai-queue-instance-profile"
+  }
 }
 
 resource "aws_iam_role_policy" "valohai_queue_policy" {

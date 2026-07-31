@@ -8,22 +8,25 @@ resource "aws_vpc" "valohai-vpc" {
   enable_dns_hostnames = true
 
   tags = {
-    Name    = "valohai-vpc",
-    valohai = 1
+    Name    = "valohai-vpc"
   }
+}
+
+locals {
+  az_count    = length(data.aws_availability_zones.available.names)
+  subnet_bits = ceil(log(local.az_count, 2))
 }
 
 # Subnet per availability zone
 resource "aws_subnet" "valohai_subnets" {
-  count                   = length(data.aws_availability_zones.available.names)
+  count                   = local.az_count
   vpc_id                  = aws_vpc.valohai-vpc.id
-  cidr_block              = "10.0.${16 * count.index}.0/20"
+  cidr_block              = cidrsubnet(aws_vpc.valohai-vpc.cidr_block, local.subnet_bits, count.index)
   availability_zone       = data.aws_availability_zones.available.names[count.index]
   map_public_ip_on_launch = true
 
   tags = {
     Name    = "valohai-subnet-${1 + count.index}",
-    valohai = 1
   }
 }
 
@@ -31,8 +34,7 @@ resource "aws_subnet" "valohai_subnets" {
 resource "aws_internet_gateway" "valohai-igw" {
   vpc_id = aws_vpc.valohai-vpc.id
   tags = {
-    "Name"  = "valohai-igw",
-    valohai = 1
+    "Name"  = "valohai-igw"
   }
 }
 
@@ -61,8 +63,7 @@ resource "aws_security_group" "valohai-sg-workers" {
   }
 
   tags = {
-    Name    = "valohai-sg-workers",
-    valohai = 1
+    Name    = "valohai-sg-workers"
   }
 }
 
@@ -103,7 +104,6 @@ resource "aws_security_group" "valohai-sg-queue" {
   }
 
   tags = {
-    Name    = "valohai-sg-queue",
-    valohai = 1
+    Name    = "valohai-sg-queue"
   }
 }

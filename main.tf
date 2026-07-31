@@ -1,6 +1,8 @@
 terraform {
+  required_version = ">= 1.12.1"
   required_providers {
     aws = {
+      version = "~> 6.0"
       source = "hashicorp/aws"
     }
   }
@@ -9,6 +11,13 @@ terraform {
 provider "aws" {
   profile = var.aws_profile
   region  = var.region
+
+  default_tags {
+    tags = {
+      ProvisionedUsing = "Terraform"
+      valohai          = "1"
+    }
+  }
 }
 
 module "VPC" {
@@ -32,7 +41,7 @@ module "EC2" {
 module "IAM_Master" {
   source = "./Module/IAM/Master"
 
-  valohai_assume_user  = var.valohai_assume_user
+  valohai_assume_user = var.valohai_assume_user
 
   depends_on = [module.IAM_Workers]
 }

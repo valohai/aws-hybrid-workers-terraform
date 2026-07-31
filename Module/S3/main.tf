@@ -3,6 +3,14 @@ data "aws_caller_identity" "current" {}
 resource "aws_s3_bucket" "valohai_data" {
   bucket = "valohai-data-${data.aws_caller_identity.current.account_id}"
 
+  tags = {
+    Name = "valohai-bucket"
+  }
+}
+
+resource "aws_s3_bucket_cors_configuration" "valohai_cors_rules" {
+  bucket = aws_s3_bucket.valohai_data.id
+
   cors_rule {
     allowed_headers = ["Authorization"]
     allowed_methods = ["GET"]
@@ -21,8 +29,8 @@ resource "aws_s3_bucket" "valohai_data" {
 resource "aws_s3_bucket_public_access_block" "valohai_datablock_access" {
   bucket = aws_s3_bucket.valohai_data.id
 
-  block_public_acls         = true
-  block_public_policy       = true
-  ignore_public_acls        = true
-  restrict_public_buckets   = true
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
